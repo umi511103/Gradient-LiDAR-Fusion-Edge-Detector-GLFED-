@@ -1,6 +1,4 @@
-![image](https://github.com/user-attachments/assets/8ef3e289-ab40-447f-b704-b192927e4b23)# Gradient-LiDAR-Fusion-Edge-Detector-GLFED-
-
-
+Depth-Gradient Edge Detection Algorithm (DGEA) / 深度梯度邊緣檢測算法
 
 本演算法旨在結合光達點雲與相機影像，提取點雲中的邊緣與平面特徵，並將其有效地映射至深度影像，以減輕光照變化對特徵提取的影響。
 
@@ -31,7 +29,7 @@
 原算法
 ![image](https://github.com/user-attachments/assets/6f0a9cb5-0f67-463b-a917-b1842c64dc0f)
 
-深度梯度边缘检测算法(GLFED)
+深度梯度邊緣檢測算法(GLFED)
 ![image](https://github.com/user-attachments/assets/a0404f84-f462-4ec1-9f5a-887e6e5b0fe8)
 
 
