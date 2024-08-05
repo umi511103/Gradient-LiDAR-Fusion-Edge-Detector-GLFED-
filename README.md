@@ -1,3 +1,5 @@
+//中文
+
 Depth-Gradient Edge Detection Algorithm (DGEA) / 深度梯度邊緣檢測算法
 
 本演算法旨在結合光達點雲與相機影像，提取點雲中的邊緣與平面特徵，並將其有效地映射至深度影像，以減輕光照變化對特徵提取的影響。
@@ -24,7 +26,7 @@ Depth-Gradient Edge Detection Algorithm (DGEA) / 深度梯度邊緣檢測算法
 邊緣點投影與優化： 將邊緣點投影至深度影像，並檢查投影點是否位於增強後的邊緣附近。此步驟利用影像的邊緣資訊，進一步確認點雲中提取的邊緣點的準確性。
 平面點雲還原與優化： 利用深度影像中的深度值，將平面點從影像座標還原至三維座標，並進行降採樣優化。
 
-由於我們將光捯掃描點集中在kitti車輛的左邊相機，因此模擬也是以這範圍為主
+由於我們將光達掃描點集中在kitti車輛的左邊相機，因此模擬也是以這範圍為主
 模擬成績如下(測量使用這工具https://github.com/LeoQLi/KITTI_odometry_evaluation_tool.git) :
 原算法
 ![image](https://github.com/user-attachments/assets/6f0a9cb5-0f67-463b-a917-b1842c64dc0f)
@@ -45,3 +47,49 @@ Depth-Gradient Edge Detection Algorithm (DGEA) / 深度梯度邊緣檢測算法
 // National Chung Hsing University
 // Author of GLFED: Jia-En Li
 // Email g112002612@mail.nchu.edu.tw
+
+
+//English
+
+Depth-Gradient Edge Detection Algorithm (DGEA) / 深度梯度边缘检测算法
+
+The purpose of this algorithm is to combine LiDAR point clouds with camera images to extract edge and plane features from the point clouds and map them effectively to depth images. This reduces the impact of lighting changes on feature extraction.
+
+Point Cloud Preprocessing
+Remove Invalid Points: Eliminate NaN values from the point cloud to ensure data integrity.
+Scan Line Segmentation: Divide the point cloud into multiple sub-point clouds based on LiDAR scan lines for independent processing.
+Feature Extraction
+Curvature Calculation: For each point on the scan line, calculate its curvature value. Points with larger curvature indicate significant geometric shape changes in their vicinity, often representing edge points. Points with smaller curvature indicate flat areas, typically plane points.
+Region Segmentation: Segment the scan lines into multiple regions for finer feature extraction.
+Feature Point Selection
+Edge Points:
+Initially, select points with curvature exceeding a specific threshold (0.06 or 0.3, determined experimentally in this algorithm).
+Then, check if the neighboring points are also on the edge. This step effectively removes isolated noise points, ensuring the extracted edge points are continuous and representative.
+Plane Points:
+Depth Consistency Check: Select points with minor depth variation within a certain neighborhood range, controlled by the window_size parameter (set to 5 in this algorithm). These points usually belong to the same plane.
+Gradient Consistency Check: Further check whether the gradient changes of these points in the depth image are consistent. This step excludes points that have small depth changes but belong to slopes or surfaces.
+Image Intensity Consistency Check: If the points do not meet the depth and gradient conditions above, check if the image intensity within their neighborhood is relatively uniform. This step utilizes image information to compensate for LiDAR's shortcomings in plane detection, especially in scenes with significant lighting variations.
+Downsampling: Perform downsampling on edge and plane point clouds to reduce data volume and improve subsequent processing efficiency.
+Depth Image Fusion
+Point Cloud Projection: Project the plane points onto the depth image and record the depth values.
+Edge Enhancement: Use the Sobel operator to calculate the gradient of the depth image to enhance edge information.
+Edge Point Projection and Optimization: Project edge points onto the depth image and check if the projection points are near the enhanced edges. This step leverages the image's edge information to further confirm the accuracy of the edge points extracted from the point cloud.
+Plane Point Cloud Restoration and Optimization: Use the depth values from the depth image to restore plane points from image coordinates to 3D coordinates and perform downsampling optimization.
+The LiDAR scan points are concentrated on the left camera of the Kitti vehicle, so the simulation focuses on this area as well.
+
+Simulation Results (in chinese description)
+
+Note:
+
+When running this project, remember to delete the boot file, as it simulates the bash environment.
+If using this code, please credit the authors and reference them as follows:
+Structure Reference Author:
+
+FLOAM Author: Wang Han
+Email: wh200720041@gmail.com
+Homepage: https://wanghan.pro
+Author of GLFED:
+
+University: National Chung Hsing University
+Author: Jia-En Li
+Email: g112002612@mail.nchu.edu.tw
