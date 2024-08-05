@@ -30,8 +30,8 @@ Depth-Gradient Edge Detection Algorithm (DGEA) / 深度梯度邊緣檢測算法
 ![image](https://github.com/user-attachments/assets/6f0a9cb5-0f67-463b-a917-b1842c64dc0f)
 
 深度梯度邊緣檢測算法(GLFED)
-![image](https://github.com/user-attachments/assets/a0404f84-f462-4ec1-9f5a-887e6e5b0fe8)
 
+![image](https://github.com/user-attachments/assets/a0404f84-f462-4ec1-9f5a-887e6e5b0fe8)
 
 
 使用其程式碼務必標著作者及參考作者
