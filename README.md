@@ -25,7 +25,7 @@ Depth-Gradient Edge Detection Algorithm (DGEA) / 深度梯度邊緣檢測算法
 平面點雲還原與優化： 利用深度影像中的深度值，將平面點從影像座標還原至三維座標，並進行降採樣優化。
 
 由於我們將光捯掃描點集中在kitti車輛的左邊相機，因此模擬也是以這範圍為主
-模擬成績如下 :
+模擬成績如下(測量使用這工具https://github.com/LeoQLi/KITTI_odometry_evaluation_tool.git) :
 原算法
 ![image](https://github.com/user-attachments/assets/6f0a9cb5-0f67-463b-a917-b1842c64dc0f)
 
@@ -33,7 +33,9 @@ Depth-Gradient Edge Detection Algorithm (DGEA) / 深度梯度邊緣檢測算法
 
 ![image](https://github.com/user-attachments/assets/a0404f84-f462-4ec1-9f5a-887e6e5b0fe8)
 
-
+//=========================
+執行此專案記得將boot刪除 ，內部為模擬bash
+//=========================
 使用其程式碼務必標著作者及參考作者
 架構參考作者 : 
 // Author of FLOAM: Wang Han 
