@@ -16,12 +16,6 @@
 #include "opencv2/img_hash.hpp"
 
 
-//设置特征点提取需要的一些参数
-int nFeatures = 10000;//图像金字塔上特征点的数量
-int nLevels = 8;//图像金字塔层数
-float fScaleFactor = 1.2;//金字塔比例因子
-int fIniThFAST = 16; //检测fast角点阈值
-int fMinThFAST = 4; //最低阈值
 
 void LaserProcessingClass::init(lidar::Lidar lidar_param_in){
     lidar_param = lidar_param_in;
@@ -175,83 +169,7 @@ void processImage_surface(const cv::Mat& depthImage,cv::Mat gray, int half_windo
     }
 }
 //====================================================
-//=========edge==============================================
 
-// std::mutex mtx;
-
-// void processEdges(const cv::Mat& gray, const Eigen::Matrix<double, 3, 4>& matrix_3Dto2D, const pcl::PointCloud<pcl::PointXYZI>::Ptr& edge_first, 
-//                   int startIdx, int endIdx, int window_size, cv_bridge::CvImagePtr cv_ptr_2, pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_out_edge) {
-//     int half_window_size = window_size / 2;
-
-//     for (std::size_t i = startIdx; i < static_cast<std::size_t>(endIdx); i++) { 
-
-//         if (i >= edge_first->points.size()) {
-//             std::cerr << "Index out of range: " << i << std::endl;
-//             continue;
-//         }
-
-//         if (edge_first->points[i].x >= 0) {
-//             Eigen::Vector4d curr_point(edge_first->points[i].x, edge_first->points[i].y, edge_first->points[i].z, 1);
-//             Eigen::Vector3d curr_point_image = matrix_3Dto2D * curr_point;
-
-//             curr_point_image.x() = curr_point_image.x() / curr_point_image.z();
-//             curr_point_image.y() = curr_point_image.y() / curr_point_image.z();
-
-//             int x = static_cast<int>(curr_point_image.x());
-//             int y = static_cast<int>(curr_point_image.y());
-
-//             if (x >= 0 && x < gray.cols && y >= 0 && y < gray.rows) {
-//                 bool is_edge_nearby = false;
-//                 for (int dy = -half_window_size; dy <= half_window_size; dy++) {
-//                     for (int dx = -half_window_size; dx <= half_window_size; dx++) {
-//                         int nx = x + dx;
-//                         int ny = y + dy;
-//                         if (nx >= 0 && nx < gray.cols && ny >= 0 && ny < gray.rows) {
-//                             if (gray.at<uchar>(ny, nx) > 0) {
-//                                 is_edge_nearby = true;
-//                                 break;
-//                             }
-//                         }
-//                     }
-//                     if (is_edge_nearby) {
-//                         break;
-//                     }
-//                 } 
-
-//                 if (is_edge_nearby) {
-//             // 使用互斥锁保护对共享数据的访问
-//             //std::lock_guard<std::mutex> lock(mtx);
-//             //cv::circle(cv_ptr_2->image, cv::Point(x, y), 1, cv::Scalar(0, 0, 255), -1);
-//             pc_out_edge->push_back(edge_first->points[i]);
-//                 }
-//             }
-//         }
-//     }
-// }
-
-// void processImageEdges_parallel(const cv::Mat& gray, const Eigen::Matrix<double, 3, 4>& matrix_3Dto2D, const pcl::PointCloud<pcl::PointXYZI>::Ptr& edge_first, 
-//                                 int window_size, cv_bridge::CvImagePtr cv_ptr_2, pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_out_edge) {
-//     int numThreads = 1; // Number of threads to use
-//     std::vector<std::thread> threads;
-//     int totalPoints = edge_first->points.size();
-//     int pointsPerThread = totalPoints / numThreads;
-//     int remainingPoints = totalPoints % numThreads;
-//     for (int i = 0; i < numThreads; ++i) {
-//         int startIdx = i * pointsPerThread;
-//         int endIdx = (i + 1) * pointsPerThread;
-//         if (i == numThreads - 1) endIdx += remainingPoints;
-//         threads.emplace_back(processEdges, std::cref(gray), std::cref(matrix_3Dto2D), std::cref(edge_first), startIdx, endIdx, window_size, cv_ptr_2, std::ref(pc_out_edge));
-//     }
-//     // Join threads
-//     for (auto& thread : threads) {
-//         thread.join();
-//     }
-// }
-//=========================LBP=========================
-
-
-
-//=====================================================
 
 void LaserProcessingClass::pointcloudtodepth(pcl::PointCloud<pcl::PointXYZI>::Ptr& pc_in,
                                              sensor_msgs::ImageConstPtr& image_msg, 
@@ -297,10 +215,6 @@ void LaserProcessingClass::pointcloudtodepth(pcl::PointCloud<pcl::PointXYZI>::Pt
         }
     }
     std::vector<cv::Point> planePixels;
-
-    //     double otsu_thresh_val = cv::threshold(  //0529
-    //     gray, gray, 0, 255, cv::THRESH_BINARY | cv::THRESH_OTSU
-    // );
 
     cv::Mat blurred , laplacian;
     
@@ -578,58 +492,6 @@ void LaserProcessingClass::featureExtraction(pcl::PointCloud<pcl::PointXYZI>::Pt
     // cv::imshow("12345",gray);
     // cv::waitKey(0);
 
-
-    //*********************show原本edge的點雲*********************
-    // for (int i = 0; i < (int)edge_first->points.size(); i++) {
-    //     if (edge_first->points[i].x >= 0) {
-    //         Eigen::Vector4d curr_point(edge_first->points[i].x, edge_first->points[i].y, edge_first->points[i].z, 1);
-    //         Eigen::Vector3d curr_point_image = matrix_3Dto2D * curr_point;
-
-    //         curr_point_image.x() = curr_point_image.x() / curr_point_image.z();
-    //         curr_point_image.y() = curr_point_image.y() / curr_point_image.z();
-
-    //         // 檢查投影點是否在邊緣上
-    //         int x = static_cast<int>(curr_point_image.x());
-    //         int y = static_cast<int>(curr_point_image.y());
-
-    //         // 確保點在圖像範圍內
-    //         if (x >= 0 && x < gray.cols && y >= 0 && y < gray.rows) {
-    //             // 排除 y 軸座標絕對值小於 2 的點
-    //             if (std::abs(edge_first->points[i].y) >= 0.5) {
-    //                 // 繪製邊緣點
-    //                 cv::circle(cv_ptr->image, cv::Point(x, y), 1, cv::Scalar(0, 0, 255), -1);
-    //             }
-    //         }
-    //     }
-    // }
-    // // std::cout << "origin edge number = " << (int)edge_first->points.size() << std::endl;
-    // cv::imshow("original edge", cv_ptr->image);
-    // cv::waitKey(0);
-    //*********************show原本plane的點雲*********************
-    // cv_bridge::CvImagePtr cv_ptr_3;
-    // cv_ptr_3 = cv_bridge::toCvCopy(image_msg, sensor_msgs::image_encodings::BGR8);
-    // for (int i = 0; i < (int)surf_first->points.size(); i++) {
-    //     if (surf_first->points[i].x >= 0) {
-    //         Eigen::Vector4d curr_point(surf_first->points[i].x, surf_first->points[i].y, surf_first->points[i].z, 1);
-    //         Eigen::Vector3d curr_point_image = matrix_3Dto2D * curr_point;
-
-    //         curr_point_image.x() = curr_point_image.x() / curr_point_image.z();
-    //         curr_point_image.y() = curr_point_image.y() / curr_point_image.z();
-
-    //         // 檢查投影點是否在邊緣上
-    //         int x = static_cast<int>(curr_point_image.x());
-    //         int y = static_cast<int>(curr_point_image.y());
-
-    //         // 確保點在圖像範圍內
-    //         if (x >= 0 && x < gray.cols && y >= 0 && y < gray.rows) {
-    //             // 繪製邊緣點
-    //             cv::circle(cv_ptr_3->image, cv::Point(x, y), 1, cv::Scalar(0, 0, 255), -1);
-    //         }
-    //     }
-    // }
-    // // std::cout << "origin edge number = " << (int)edge_first->points.size() << std::endl;
-    // cv::imshow("original edge", cv_ptr_3->image);
-    // cv::waitKey(0);
 
     int window_size = 3; // 可以根据需要调整
 
