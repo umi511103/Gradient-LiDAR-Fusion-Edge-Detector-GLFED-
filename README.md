@@ -26,7 +26,7 @@ Depth-Gradient Edge Detection Algorithm (DGEA) / 深度梯度邊緣檢測算法
 邊緣點投影與優化： 將邊緣點投影至深度影像，並檢查投影點是否位於增強後的邊緣附近。此步驟利用影像的邊緣資訊，進一步確認點雲中提取的邊緣點的準確性。
 平面點雲還原與優化： 利用深度影像中的深度值，將平面點從影像座標還原至三維座標，並進行降採樣優化。
 
-由於我們將光達掃描點集中在kitti車輛的左邊相機，因此模擬也是以這範圍為主
+由於我們將光達掃描點集中在kitti車輛的左邊相機，只有正面資訊，因此模擬也是以這範圍為主
 模擬成績如下(測量使用這工具https://github.com/LeoQLi/KITTI_odometry_evaluation_tool.git) :
 原算法
 ![image](https://github.com/user-attachments/assets/6f0a9cb5-0f67-463b-a917-b1842c64dc0f)
